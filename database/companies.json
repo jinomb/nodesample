@@ -1,0 +1,18 @@
+[
+  {
+    "id": "0",
+    "name": "Capsule Corp",
+    "about": "Like WinRAR but we accept more file extensions.",
+    "industries": ["automobile", "house", "engineering"],
+    "numberEmployees": 2,
+    "yearFounded": 1990
+  },
+  {
+    "id": "1",
+    "name": "Red Ribbon",
+    "about": "We deliver the best Android you can ever had",
+    "industries": ["military", "artificial intelligence", "engineering"],
+    "numberEmployees": 2000,
+    "yearFounded": 1000
+  }
+]

@@ -1,40 +1,55 @@
-const { names, ultimate } = require("./module1");
-const animes = require("./module2");
-const os    = require("os");
-const fs    = require("fs");
-const http  = require("http");
-/*
-console.log(names);
-console.log(animes);
-console.log(os.cpus());
+const { Console } = require('console')
+const express   =   require('express')
+const fs = require('fs')
 
-fs.readFile("./assets/text.txt", (error, data) => {
-    if (error) console.log(error);
-    else console.log(data.toString());   
+const HOSTNAME = "localhost"
+const PORT = 4000
+
+const DB_PATH = `${__dirname}/database/companies.json`
+const app = express();
+
+const getCompanies = (req, res) => {
+    fs.readFile(DB_PATH, (error, data) => {
+        if (error) {
+            console.log(error)
+            res.status(500).end();
+        } else {
+            res.status(200).send(JSON.parse(data))
+        }
+    })
+}
+
+const deleteCompany = (res, req) => {
+    const { id } = req.params;
+
+    fs.readFile(DB_PATH, (error, data) => {
+        if (error) {
+            console.log(error)
+            res.status(500).end()
+        }
+        else {
+            const companies = JSON.parse(data);
+            const filterData = JSON.stringify(
+                companies.filter(company => company.id != id),
+                null,
+                2
+            )
+        }
+
+        fs.writeFileSync(DB_PATH, filterData);
+        res.status(200).send(JSON.parse(filterData))
+
+    })
+}
+
+app.get("/companies", getCompanies)
+
+app.delete("/companies/:id", deleteCompany);
+
+app.use((req, res) => {
+    res.status(400).send("Not Found")
 })
 
-fs.writeFile("./assets/text.txt", "im so fast master", () => {
-    console.log("done sir")
-})
-
-Aynschornous 
-
-console.log(fs.readFileSync("./assets/text.txt").toString());
-
-fs.writeFileSync("./assets/text.txt", "I'm actually faster");
-*/
-
-const HOSTNAME = "localhost";
-const PORT = 3000;
-
-const server = http.createServer((req, res) => {
-    console.log(req);
-    console.log(res);
-    res.writeHead(200, { "Content-Type": "text/plain" });
-    res.write("Hello from the Server!");
-    res.end();
-});
-
-server.listen(PORT, HOSTNAME, () => {
-    console.log(`SERVER STATER ON http://${HOSTNAME}:${PORT}`);
+app.listen(PORT, HOSTNAME, () => {
+    console.log("SERVER running")
 })
